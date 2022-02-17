@@ -2,8 +2,22 @@ import Header from "./Header";
 import Footer from "./Footer";
 import Main from "./Main";
 import "../index.css";
+import { api } from "../utils/Api";
+import { useEffect, useState } from "react";
 
 function App() {
+  const [cards, setCards] = useState([]);
+  
+  useEffect(() => {
+    api.getInitialCards()
+    .then((data) => setCards(data))
+    .catch((err) => console.log(err));
+  }, [cards]);
+
+  useEffect(() => {
+
+  }, []);
+
   return (
     <div class="page">
       <div class="page__container">
