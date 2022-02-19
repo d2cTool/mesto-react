@@ -1,34 +1,31 @@
-import { useEffect, useState } from "react";
-
 function Card({
-  title,
-  imgUrl,
-  likeCount,
-  handleDeleteClick,
-  handleLikeClick,
+  card,
+  userInfo,
+  cardHandlers
 }) {
-  const [likes, setLikes] = useState(likeCount);
-  useEffect();
+  const isOwner = card.owner._id === userInfo._id;
+  const canLike = card.likes.some((like) => like._id === userInfo._id);
 
   return (
     <article className="element">
-      <img src={imgUrl} alt="изображение" className="element__photo" />
+      <img src={card.link} alt="изображение" className="element__photo" />
       <button
         type="button"
-        ariaLabel="delete"
+        aria-label="delete"
         className="element__delete-button"
-        onClick={handleDeleteClick}
+        onClick={cardHandlers.handleDeleteClick}
+        style={{ display: isOwner ? 'block' : 'none' }}
       ></button>
       <div className="element__group">
-        <h2 className="element__title">{title}</h2>
+        <h2 className="element__title">{card.name}</h2>
         <div className="element__like-group">
           <button
             type="button"
-            ariaLabel="like"
-            className="element__like-button"
-            onClick={handleLikeClick}
+            aria-label="like"
+            className={"element__like-button " + (canLike ? 'element__like-button_active' : '')}
+            onClick={cardHandlers.handleLikeClick}
           ></button>
-          <span className="element__like-count">{likeCount}</span>
+          <span className="element__like-count">{card.likes.length}</span>
         </div>
       </div>
     </article>

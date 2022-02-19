@@ -1,32 +1,26 @@
 import React from "react";
 
-function PopupWithForm(props) {
-  const [isOpen, setIsOpen] = React.useState({ ...props.isOpen });
-
-  React.useEffect(() => {
-    setIsOpen(props.isOpen);
-  }, [props.isOpen]);
-
+function PopupWithForm({isOpen, name, title, btnName, popupHandlers, children}) {
   return (
-    <section className={`popup popup_type_${props.name} ` + (props.isOpen ? 'popup_opened' : '')}>
-      <div className={`popup__container popup__container_type_${props.name}`}>
+    <section className={`popup popup_type_${name} ` + (isOpen ? 'popup_opened' : '')}>
+      <div className={`popup__container popup__container_type_${name}`}>
         <button
           type="button"
-          ariaLabel="close"
+          aria-label="close"
           className="popup__close-button"
-          onClick={props.handleCloseClick}
+          onClick={popupHandlers.handleCloseClick}
         ></button>
         <form
           action="/post"
-          name={`${props.name}Form`}
+          name={`${name}Form`}
           className="popup__form"
           novalidate
-          onSubmit={props.handleOnSubmit}
+          onSubmit={popupHandlers.handleOnSubmit}
         >
-          <h2 className="popup__title">{props.title}</h2>
-          {props.children}
-          <button type="submit" class="popup__button">
-            {props.btnName}
+          <h2 className="popup__title">{title}</h2>
+          {children}
+          <button type="submit" className="popup__button">
+            {btnName}
           </button>
         </form>
       </div>
