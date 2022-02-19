@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import Header from "./Header";
 import Footer from "./Footer";
 import Main from "./Main";
@@ -6,64 +6,137 @@ import "../index.css";
 import { api } from "../utils/Api";
 import { useEffect, useState } from "react";
 import ProfilePopup from "./ProfilePopup";
+import CardPopup from "./CardPopup";
+import AvatarPopup from "./AvatartPopup";
+import ImagePopup from "./ImagePopup";
+import ConfirmationPopup from "./ConfirmationPopup";
 
 function App() {
+  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(false);
+  const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
+  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = React.useState(false);
+  const [isPreviewPopupOpen, setIsPreviewPopupOpen] = React.useState(false);
+  const [isConfirmPopupOpen, setIsConfirmPopupOpen] = React.useState(false);
 
-  const [showProfilePopup, setShowProfilePopup] = React.useState(false);
+  const [selectedCard, setSelectedCard] = React.useState({name: "none", link: ""});
 
   const [cards, setCards] = useState([]);
-  const [userInfo, setUserInfo] = useState({});
+  const [userInfo, setUserInfo] = useState({ name: "none", about: "none" });
 
   useEffect(() => {
-    api.getInitialCards()
+    api
+      .getInitialCards()
       .then((data) => setCards(data))
       .catch((err) => console.log(err));
+
+    console.log("getInitialCards");
   }, []);
 
   useEffect(() => {
-    api.getUserInfo()
+    api
+      .getUserInfo()
       .then((data) => setUserInfo(data))
       .catch((err) => console.log(err));
+
+    console.log("getUserInfo");
   }, []);
 
-  function handleEditProfileClick() {
-    setShowProfilePopup(true);
+  const updateCard = (card) => {
+    const cardIndex = cards.findIndex((c) => c._id === card._id);
+    const newCards = [...cards];
+    newCards[cardIndex] = card;
+    setCards(newCards);
   }
 
-  function handleEditAvatarClick() {
-  }
+  const onLikeCard = (card) => {
+    const isLiked = card.likes.some((like) => like._id === userInfo._id);
+    if (!isLiked)
+      api
+        .addLike(card._id)
+        .then((data) => updateCard(data))
+        .catch((err) => console.log(err));
+    else
+      api
+        .removeLike(card._id)
+        .then((data) => updateCard(data))
+        .catch((err) => console.log(err));
+  };
 
-  function handleAddPlaceClick() {
-  }
+  const onDeleteCard = (card) => {
+    api
+      .deleteCard(card._id)
+      .then(() => {
+        setCards(cards.filter((c) => c.Id !== card._id));
+        setIsConfirmPopupOpen(false);
+      })
+      .catch((err) => console.log(err));
+  };
 
-  function handleDeleteClick() {
-  }
-
-  function handleLikeClick() {
-  }
-
-  function handleCloseClick() {
-  }
-
-  function handleOnSubmit() {
-  }
-
-  function closeAllPopups() {
-    setShowProfilePopup(false);
-  }
-
-  const handlers = {profileHandlers, cardHandlers};
-  const profileHandlers = {handleEditAvatarClick, handleEditProfileClick, handleAddPlaceClick};
-  const cardHandlers = {handleDeleteClick, handleLikeClick};
-  const profilePopupHandlers = {handleCloseClick, handleOnSubmit};
+  const onAddCard = ({name, link}) => {
+    api
+    .postCard(name, link)
+    .then((data) => {
+      cards.prepend(data);
+      setCards(cards);
+    })
+    .catch((err) => console.log(err))
+  };
 
   return (
     <div className="page">
       <div className="page__container">
         <Header />
-        <Main cards={cards} userInfo={userInfo} handlers={handlers} />
+        <Main
+          cards={cards}
+          userInfo={userInfo}
+          handleOnEditAvatar={() => setIsEditAvatarPopupOpen(true)}
+          handleOnEditProfile={() => setIsEditProfilePopupOpen(true)}
+          handleOnAddCard={() => setIsAddPlacePopupOpen(true)}
+          handleOnDelete={(card) => {
+            setSelectedCard(card);
+            setIsConfirmPopupOpen(true);
+          }}
+          handleOnLike={(card) => onLikeCard(card)}
+          handleOnPreview={(card) => {
+            setSelectedCard(card);
+            setIsPreviewPopupOpen(true);
+          }}
+        />
         <Footer />
-        <ProfilePopup isOpen={showProfilePopup} userInfo={userInfo} profilePopupHandlers={profilePopupHandlers} />
+        <ProfilePopup
+          isOpen={isEditProfilePopupOpen}
+          userInfo={userInfo}
+          handleOnClose={() => setIsEditProfilePopupOpen(false)}
+          handleOnSubmit={() => {
+            console.log("handleOnSubmit");
+          }}
+        />
+        <CardPopup
+          isOpen={isAddPlacePopupOpen}
+          handleOnClose={() => setIsAddPlacePopupOpen(false)}
+          handleOnSubmit={(data) => onAddCard(data)}
+        />
+        <AvatarPopup
+          isOpen={isEditAvatarPopupOpen}
+          userInfo={userInfo}
+          handleOnClose={() => setIsEditAvatarPopupOpen(false)}
+          handleOnSubmit={() => {
+            console.log("handleOnSubmit");
+          }}
+        />
+        <ImagePopup
+          isOpen={isPreviewPopupOpen}
+          card={selectedCard}
+          handleOnClose={() => {
+            setSelectedCard({});
+            setIsPreviewPopupOpen(false);
+          }}
+        />
+        <ConfirmationPopup
+          isOpen={isConfirmPopupOpen}
+          handleOnClose={() => setSelectedCard({})}
+          handleOnSubmit={() => onDeleteCard(selectedCard)}
+        />
       </div>
     </div>
   );

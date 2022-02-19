@@ -34,5 +34,5 @@
 .profile__avatar:hover:before {
   z-index: 0;
   opacity: 0.8;
-  transition: opacity 1s ease-in-out;
+  transition: opacity 0.3s ease-in-out;
 }

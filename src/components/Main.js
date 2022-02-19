@@ -1,14 +1,15 @@
 import Card from "./Card";
 import Profile from "./Profile";
 
-function Main({ cards, userInfo, handlers }) {
+function Main({ cards, userInfo, ...props }) {
+  //console.log('Main');
   return (
     <main className="main">
-      <Profile userInfo={userInfo} profileHandlers={handlers.profileHandlers} />
+      <Profile userInfo={userInfo} {...props} />
       <section className="elements">
-        {
-          cards.map((card) => <Card key={card._id} card={card} userInfo={userInfo} cardHandlers={handlers.cardHandlers} />)
-        }
+        {cards.map((card) => (
+          <Card key={card._id} card={card} userInfo={userInfo} {...props} />
+        ))}
       </section>
     </main>
   );

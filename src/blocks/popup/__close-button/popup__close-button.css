@@ -18,7 +18,7 @@
   background-position: center;
   background-image: url("../../../images/close-icon.svg");
 
-  transition: opacity 1s ease-in-out;
+  transition: opacity 0.3s ease-in-out;
 
   cursor: pointer;
 }

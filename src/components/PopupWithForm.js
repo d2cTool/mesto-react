@@ -1,21 +1,29 @@
-import React from "react";
-
-function PopupWithForm({isOpen, name, title, btnName, popupHandlers, children}) {
+function PopupWithForm({
+  isOpen,
+  name,
+  title,
+  btnName,
+  handleOnClose,
+  handleOnSubmit,
+  children,
+}) {
   return (
-    <section className={`popup popup_type_${name} ` + (isOpen ? 'popup_opened' : '')}>
+    <section
+      className={`popup popup_type_${name} ` + (isOpen ? "popup_opened" : "")}
+    >
       <div className={`popup__container popup__container_type_${name}`}>
         <button
           type="button"
           aria-label="close"
           className="popup__close-button"
-          onClick={popupHandlers.handleCloseClick}
+          onClick={handleOnClose}
         ></button>
         <form
           action="/post"
           name={`${name}Form`}
           className="popup__form"
-          novalidate
-          onSubmit={popupHandlers.handleOnSubmit}
+          noValidate
+          onSubmit={handleOnSubmit}
         >
           <h2 className="popup__title">{title}</h2>
           {children}
