@@ -1,13 +1,12 @@
 import PopupWithForm from "./PopupWithForm";
 
-function ProfilePopup({ isOpen, userInfo, handleOnClose, handleOnSubmit }) {
+function ProfilePopup({ isOpen, handleOnClose }) {
   return (
     <PopupWithForm
       btnName="Сохранить"
       name="profile"
       title="Редактировать профиль"
       handleOnClose={handleOnClose}
-      handleOnSubmit={handleOnSubmit}
       isOpen={isOpen}
     >
       <input
@@ -16,7 +15,7 @@ function ProfilePopup({ isOpen, userInfo, handleOnClose, handleOnSubmit }) {
         name="name"
         className="popup__input"
         placeholder="Имя"
-        value={userInfo.name}
+        value="me"
         required
         minLength="2"
         maxLength="40"
@@ -28,7 +27,7 @@ function ProfilePopup({ isOpen, userInfo, handleOnClose, handleOnSubmit }) {
         name="description"
         className="popup__input"
         placeholder="Профессиональная деятельность"
-        value={userInfo.about}
+        value="me me"
         required
         minLength="2"
         maxLength="200"

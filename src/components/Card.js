@@ -1,12 +1,6 @@
-function Card({
-  card,
-  userInfo,
-  handleOnDelete,
-  handleOnLike,
-  handleOnPreview,
-}) {
-  const isOwner = card.owner._id === userInfo._id;
-  const canLike = card.likes.some((like) => like._id === userInfo._id);
+function Card({ card, handleDeleteClick, handleLikeClick, handleImageClick }) {
+  const isOwner = false; //card.owner._id === userInfo._id;
+  const canLike = false; //card.likes.some((like) => like._id === userInfo._id);
 
   return (
     <article className="element">
@@ -14,13 +8,13 @@ function Card({
         src={card.link}
         alt="изображение"
         className="element__photo"
-        onClick={() => handleOnPreview(card)}
+        onClick={handleImageClick}
       />
       <button
         type="button"
         aria-label="delete"
         className="element__delete-button"
-        onClick={() => handleOnDelete(card)}
+        onClick={handleDeleteClick}
         style={{ display: isOwner ? "block" : "none" }}
       ></button>
       <div className="element__group">
@@ -31,9 +25,9 @@ function Card({
             aria-label="like"
             className={
               "element__like-button " +
-              (canLike ? "element__like-button_active" : "")
+              (canLike && "element__like-button_active")
             }
-            onClick={() => handleOnLike(card)}
+            onClick={handleLikeClick}
           ></button>
           <span className="element__like-count">{card.likes.length}</span>
         </div>
