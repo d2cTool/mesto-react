@@ -6,8 +6,8 @@ function CardPopup({ isOpen, handleOnClose, handleOnSubmit }) {
       btnName="Создать"
       name="card"
       title="Новое место"
-      handleOnClose={() => handleOnClose()}
-      handleOnSubmit={() => handleOnSubmit()}
+      handleOnClose={handleOnClose}
+      handleOnSubmit={handleOnSubmit}
       isOpen={isOpen}
     >
       <input

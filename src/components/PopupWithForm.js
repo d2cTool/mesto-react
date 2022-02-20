@@ -9,7 +9,7 @@ function PopupWithForm({
 }) {
   return (
     <section
-      className={`popup popup_type_${name} ` + (isOpen ? "popup_opened" : "")}
+      className={'popup ' + (isOpen && "popup_opened")}
     >
       <div className={`popup__container popup__container_type_${name}`}>
         <button
