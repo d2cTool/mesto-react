@@ -3,8 +3,8 @@ function PopupWithForm({
   name,
   title,
   btnName,
-  handleOnClose,
-  handleOnSubmit,
+  onClose,
+  onSubmit,
   children,
 }) {
   return (
@@ -16,14 +16,14 @@ function PopupWithForm({
           type="button"
           aria-label="close"
           className="popup__close-button"
-          onClick={handleOnClose}
+          onClick={onClose}
         ></button>
         <form
           action="/post"
           name={`${name}Form`}
           className="popup__form"
           noValidate
-          onSubmit={handleOnSubmit}
+          onSubmit={onSubmit}
         >
           <h2 className="popup__title">{title}</h2>
           {children}

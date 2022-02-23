@@ -1,6 +1,6 @@
 import PopupWithForm from "./PopupWithForm";
 
-function AvatarPopup({ isOpen, handleOnClose, handleOnSubmit }) {
+function EditAvatarPopup({ isOpen, handleOnClose, handleOnSubmit }) {
   return (
     <PopupWithForm
       btnName="Сохранить"
@@ -24,4 +24,4 @@ function AvatarPopup({ isOpen, handleOnClose, handleOnSubmit }) {
   );
 }
 
-export default AvatarPopup;
+export default EditAvatarPopup;

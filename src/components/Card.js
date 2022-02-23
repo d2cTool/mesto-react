@@ -1,6 +1,23 @@
-function Card({ card, handleDeleteClick, handleLikeClick, handleImageClick }) {
-  const isOwner = false; //card.owner._id === userInfo._id;
-  const canLike = false; //card.likes.some((like) => like._id === userInfo._id);
+import { useContext } from "react";
+import { CurrentUserContext } from "../contexts/CurrentUserContext";
+
+function Card({ card, onCardLike, onCardPreview, onCardDelete }) {
+  const currentUser = useContext(CurrentUserContext);
+
+  const isOwn = card.owner._id === currentUser._id;
+  const canLike = card.likes.some((like) => like._id === currentUser._id);
+
+  function handleLikeClick() {
+    onCardLike();
+  }
+
+  function handlePreviewClick() {
+    onCardPreview();
+  }
+
+  function handleDeleteClick() {
+    onCardDelete();
+  }
 
   return (
     <article className="element">
@@ -8,14 +25,14 @@ function Card({ card, handleDeleteClick, handleLikeClick, handleImageClick }) {
         src={card.link}
         alt="изображение"
         className="element__photo"
-        onClick={handleImageClick}
+        onClick={handlePreviewClick}
       />
       <button
         type="button"
         aria-label="delete"
         className="element__delete-button"
         onClick={handleDeleteClick}
-        style={{ display: isOwner ? "block" : "none" }}
+        style={{ display: isOwn ? "block" : "none" }}
       ></button>
       <div className="element__group">
         <h2 className="element__title">{card.name}</h2>

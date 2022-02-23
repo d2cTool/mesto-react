@@ -26,6 +26,10 @@ class Api {
     });
   }
 
+  changeLikeCardStatus(id, needLike) {
+    return needLike ? this.addLike(id) : this.removeLike(id);
+  }
+
   addLike(id) {
     return this._fetchRequest(`/cards/${id}/likes`, {
       headers: this._headers,
@@ -42,7 +46,7 @@ class Api {
 
   getUserInfo() {
     return this._fetchRequest(`/users/me`, {
-      headers: this._headers
+      headers: this._headers,
     });
   }
 
@@ -63,18 +67,17 @@ class Api {
       method: "PATCH",
       body: JSON.stringify({
         avatar: avatar,
-      })
+      }),
     });
   }
 
   _fetchRequest(url, options) {
-    return fetch(`${this._baseUrl}${url}`, options)
-      .then((res) => {
-        if (res.ok) {
-          return res.json();
-        }
-        return Promise.reject(res.status);
-      })
+    return fetch(`${this._baseUrl}${url}`, options).then((res) => {
+      if (res.ok) {
+        return res.json();
+      }
+      return Promise.reject(res.status);
+    });
   }
 }
 
