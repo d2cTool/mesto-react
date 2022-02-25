@@ -1,17 +1,17 @@
-function ImagePopup({ card, handleCloseClick }) {
+function ImagePopup({ card, onClose }) {
   return (
     <section
       className={"popup popup_type_preview " + (card.name && "popup_opened")}
     >
       <div
         className="popup__container popup__container_type_preview"
-        onClick={handleCloseClick}
+        onClick={onClose}
       >
         <button
           type="button"
           aria-label="close"
           className="popup__close-button popup__preview-close-button"
-          onClick={handleCloseClick}
+          onClick={onClose}
         ></button>
         <figure className="popup__figure">
           <img src={card.link} alt={card.name} className="popup__photo" />

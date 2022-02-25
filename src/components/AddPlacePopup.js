@@ -1,13 +1,34 @@
 import PopupWithForm from "./PopupWithForm";
+import { useState } from "react";
 
-function CardPopup({ isOpen, handleOnClose, handleOnSubmit }) {
+function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
+  const [name, setName] = useState("");
+  const [link, setLink] = useState("");
+
+  function handleNameChange(e) {
+    setName(e.target.value);
+  }
+
+  function handleLinkChange(e) {
+    setLink(e.target.value);
+  }
+
+  function handleOnSubmit(e) {
+    e.preventDefault();
+    if (name && link)
+      onAddPlace({
+        name,
+        link,
+      });
+  }
+
   return (
     <PopupWithForm
       btnName="Создать"
       name="card"
       title="Новое место"
-      handleOnClose={handleOnClose}
-      handleOnSubmit={handleOnSubmit}
+      onClose={onClose}
+      onSubmit={handleOnSubmit}
       isOpen={isOpen}
     >
       <input
@@ -16,10 +37,11 @@ function CardPopup({ isOpen, handleOnClose, handleOnSubmit }) {
         name="name"
         className="popup__input"
         placeholder="Название"
-        value=""
+        value={name}
         required
         minLength="2"
         maxLength="30"
+        onChange={handleNameChange}
       />
       <span className="popup__form-text-error placeNameInput-error"></span>
       <input
@@ -28,12 +50,13 @@ function CardPopup({ isOpen, handleOnClose, handleOnSubmit }) {
         name="link"
         className="popup__input"
         placeholder="Ссылка на картинку"
-        value=""
+        value={link}
         required
+        onChange={handleLinkChange}
       />
       <span className="popup__form-text-error linkInput-error"></span>
     </PopupWithForm>
   );
 }
 
-export default CardPopup;
+export default AddPlacePopup;

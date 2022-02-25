@@ -1,22 +1,22 @@
 import { useContext } from "react";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
 
-function Card({ card, onCardLike, onCardPreview, onCardDelete }) {
+function Card({ card, onCardPreview, onCardLike, onCardDelete }) {
   const currentUser = useContext(CurrentUserContext);
 
   const isOwn = card.owner._id === currentUser._id;
   const canLike = card.likes.some((like) => like._id === currentUser._id);
 
   function handleLikeClick() {
-    onCardLike();
+    onCardLike(card);
   }
 
   function handlePreviewClick() {
-    onCardPreview();
+    onCardPreview(card);
   }
 
   function handleDeleteClick() {
-    onCardDelete();
+    onCardDelete(card);
   }
 
   return (
