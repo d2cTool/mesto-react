@@ -7,6 +7,7 @@ import EditProfilePopup from "./EditProfilePopup";
 import AddPlacePopup from "./AddPlacePopup";
 import EditAvatarPopup from "./EditAvatarPopup";
 import ImagePopup from "./ImagePopup";
+import ConfirmationPopup from "./ConfirmationPopup";
 
 import { api } from "../utils/Api";
 import { useState, useEffect } from "react";
@@ -16,9 +17,11 @@ function App() {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
+  const [isConfirmationPopupOpen, setIsConfirmationPopupOpen] = useState(false);
 
   const [currentUser, setCurrentUser] = useState({});
   const [selectedCard, setSelectedCard] = useState({});
+  const [cardToDelete, setCardToDelete] = useState({});
   const [cards, setCards] = useState([]);
 
   useEffect(() => {
@@ -48,11 +51,17 @@ function App() {
       .catch((err) => console.log(err));
   }
 
-  function handleCardDelete(card) {
+  function handleCardDeleteConfirmanion(card) {
+    setIsConfirmationPopupOpen(true);
+    setCardToDelete(card);
+  }
+
+  function handleCardDelete() {
     api
-      .deleteCard(card._id)
+      .deleteCard(cardToDelete._id)
       .then(() => {
-        setCards(cards.filter((c) => c._id !== card._id));
+        setCards(cards.filter((c) => c._id !== cardToDelete._id));
+        closePopups();
       })
       .catch((err) => console.log(err));
   }
@@ -74,40 +83,41 @@ function App() {
     setIsEditProfilePopupOpen(false);
     setIsAddPlacePopupOpen(false);
     setIsEditAvatarPopupOpen(false);
+    setIsConfirmationPopupOpen(false);
   }
 
   function handlePreviewClick(card) {
     setSelectedCard(card);
   }
 
-  function handleUserInfoUpdate({name, about}) {
+  function handleUserInfoUpdate({ name, about }) {
     api
-    .patchUserInfo(name, about)
-    .then((data) => {
-      setCurrentUser(data);
-      closePopups();
-    })
-    .catch((err) => console.log(err));
+      .patchUserInfo(name, about)
+      .then((data) => {
+        setCurrentUser(data);
+        closePopups();
+      })
+      .catch((err) => console.log(err));
   }
 
   function handleAvatarUpdate(avatar) {
     api
-    .patchUserAvatar(avatar)
-    .then((data) => {
-      setCurrentUser(data);
-      closePopups();
-    })
-    .catch((err) => console.log(err));
+      .patchUserAvatar(avatar)
+      .then((data) => {
+        setCurrentUser(data);
+        closePopups();
+      })
+      .catch((err) => console.log(err));
   }
 
-  function handleAddPlace({name,link}) {
+  function handleAddPlace({ name, link }) {
     api
-    .postCard(name, link)
-    .then((data) => {
-      setCards([data, ...cards]); 
-      closePopups();
-    })
-    .catch((err) => console.log(err));
+      .postCard(name, link)
+      .then((data) => {
+        setCards([data, ...cards]);
+        closePopups();
+      })
+      .catch((err) => console.log(err));
   }
 
   return (
@@ -122,7 +132,7 @@ function App() {
             onAddCard={handleAddPlaceClick}
             onPreview={handlePreviewClick}
             onLike={handleCardLike}
-            onDelete={handleCardDelete}
+            onDelete={handleCardDeleteConfirmanion}
           />
           <Footer />
           <EditProfilePopup
@@ -130,8 +140,8 @@ function App() {
             onClose={closePopups}
             onUpdateUser={handleUserInfoUpdate}
           />
-          <AddPlacePopup 
-            isOpen={isAddPlacePopupOpen} 
+          <AddPlacePopup
+            isOpen={isAddPlacePopupOpen}
             onClose={closePopups}
             onAddPlace={handleAddPlace}
           />
@@ -140,7 +150,15 @@ function App() {
             onClose={closePopups}
             onUpdateAvatar={handleAvatarUpdate}
           />
-          <ImagePopup card={selectedCard} onClose={closePopups} />
+          <ImagePopup 
+            card={selectedCard} 
+            onClose={closePopups} 
+          />
+          <ConfirmationPopup
+            isOpen={isConfirmationPopupOpen}
+            onClose={closePopups}
+            onConfirm={handleCardDelete}
+          />
         </div>
       </div>
     </CurrentUserContext.Provider>

@@ -1,13 +1,18 @@
 import PopupWithForm from "./PopupWithForm";
 
-function ConfirmationPopup({ isOpen, handleOnClose, handleOnSubmit }) {
+function ConfirmationPopup({ isOpen, onClose, onConfirm }) {
+  function handleOnSubmit(e) {
+    e.preventDefault();
+    onConfirm();
+  }
+
   return (
     <PopupWithForm
       btnName="Да"
       name="confirmation"
       title="Вы уверены?"
-      handleOnClose={handleOnClose}
-      handleOnSubmit={handleOnSubmit}
+      onClose={onClose}
+      onSubmit={handleOnSubmit}
       isOpen={isOpen}
     ></PopupWithForm>
   );
